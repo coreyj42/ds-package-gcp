@@ -1,0 +1,48 @@
+# USAGE:
+#   You need to set your GCP_PROJECT_ID and GCP_SA_KEY in the repos Secrets - Actions
+#   The key is the whole .json service account keyfile
+#   Reduce that .json file to a single line to prevent issues
+name: Build package and upload to GCP Artifact Registry
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-and-upload:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.11'
+
+    - name: Install Poetry for dependencies management
+      run: pip install poetry
+
+    - name: Install dependencies
+      run: poetry install
+
+    - name: Build package
+      run: poetry build
+
+    - name: Authorize the below actions
+      uses: google-github-actions/auth@v2
+      with:
+        credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@v2
+
+    - name: Install Twine
+      run: pip install twine keyring keyrings.google-artifactregistry-auth
+
+    - name: Upload package
+      run: |
+        twine upload --repository-url https://europe-west3-python.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/ds-packages dist/* 

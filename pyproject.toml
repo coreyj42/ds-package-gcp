@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "ds-package-gcp"
+version = "1.1.2"
+description = "Google Cloud Platform Functions"
+authors = ["Corey Jenkins <corey.jenkins@roadsurfer.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pytest = "^8.3.3"
+black = "^24.10.0"
+flake8 = "^7.1.1"
+pandas = ">=1.5.3,<3.0.0"
+google-cloud-bigquery = "^3.41.0"
+google-cloud-aiplatform = "^1.148.1"
+google-cloud-storage = "^3.10.1"
+db-dtypes = "^1.5.1"
+jinja2 = "^3.1.6"
+joblib = "^1.5.3"
+gcsfs = "^2026.3.0"
+google-cloud-bigquery-storage = "^2.37.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
